@@ -1,0 +1,285 @@
+{
+  "frames": [
+    {
+      "frameNumber": 1,
+      "title": "Chilean Banks Audit",
+      "infoLines": [
+        "### LIVE PACKAGE DEMONSTRATION",
+        "NPM: npm install -g chilean-banks-audit",
+        "Tool: chilean-banks-audit v1.0.0",
+        "Methodology: Public Pages Only",
+        "",
+        "### AUDIT EXECUTION",
+        "• Command: npm run audit:demo",
+        "• Mode: RULE 10 Puppeteer (Visual)",
+        "• Banks: BancoEstado, Banco de Chile",
+        "• Duration: ~60 seconds total",
+        "",
+        "### RESULTS",
+        "• Total Findings: 6",
+        "• Medium: 1 | Low: 1 | Info: 4",
+        "• Screenshots: 2 captured (3.8MB)"
+      ],
+      "personalities": {
+        "neko": "Nyaa~! We're demonstrating the NPM package LIVE, desu! Watch it audit in real-time!",
+        "mario": "Ah, magnifique! The package performs its security ballet before your very eyes!",
+        "noel": "Tch. Real audit, real results. No simulation. This is production code. *smirks*"
+      },
+      "graphicType": "security_shield"
+    },
+    {
+      "frameNumber": 2,
+      "title": "Package Installation",
+      "infoLines": [
+        "### GLOBAL INSTALLATION",
+        "Command: npm install -g chilean-banks-audit",
+        "Package: Public on NPM registry",
+        "Version: 1.0.0",
+        "",
+        "### LOCAL USAGE",
+        "git clone <repo>",
+        "npm install",
+        "npm run audit:demo",
+        "",
+        "### WHAT IT DOES",
+        "• Launches Puppeteer browser (visual mode)",
+        "• Audits Chilean bank login pages",
+        "• Captures screenshots",
+        "• Generates OWASP reports",
+        "• NO credential testing!"
+      ],
+      "personalities": {
+        "glam": "¡Oye, weon! Instalación súper fácil desde NPM. ¡100% público y open source!",
+        "hannibal": "A package... publicly distributed. How civilized. Anyone can audit ethically now.",
+        "tetora": "[Fragment]: Installation... Complete... Multiple users... Can now audit... Ethically..."
+      },
+      "graphicType": "puppeteer"
+    },
+    {
+      "frameNumber": 3,
+      "title": "BancoEstado Audit",
+      "infoLines": [
+        "### LIVE AUDIT RESULTS",
+        "URL: https://www.bancoestado.cl",
+        "Status: 200 OK",
+        "Duration: 27.35 seconds",
+        "",
+        "### SECURITY ANALYSIS",
+        "• SSL/TLS: TLS 1.3 (Grade A+)",
+        "• HSTS: ✅ Enabled",
+        "• CSP: ✅ Enabled",
+        "• X-Frame-Options: ❌ Missing",
+        "• X-Content-Type-Options: ✅",
+        "",
+        "### OBSERVATIONS",
+        "• Main page is informational/marketing",
+        "• Login likely on separate subdomain",
+        "• No password fields found on main page"
+      ],
+      "personalities": {
+        "neko": "BancoEstado audited successfully, nyaa~! TLS 1.3 detected - EXCELLENT security!",
+        "mario": "The audit completed in 27 seconds! A swift and elegant performance!",
+        "noel": "Good SSL, missing X-Frame-Options. Not critical, but should be fixed. *notes*"
+      },
+      "graphicType": "ssl_lock"
+    },
+    {
+      "frameNumber": 4,
+      "title": "Banco de Chile Audit",
+      "infoLines": [
+        "### LIVE AUDIT RESULTS",
+        "URL: https://login.portal.bancochile.cl",
+        "Status: 200 OK",
+        "Est. 1893 - Oldest and most prestigious",
+        "",
+        "### PUPPETEER IN ACTION",
+        "🚀 Step 1: Browser launched (Visual)",
+        "📄 Step 2: Page created",
+        "🌐 Step 3: Response interception setup",
+        "🔗 Step 4: Navigation successful",
+        "🔐 Step 5: SSL/TLS analyzed",
+        "🛡️ Step 6: Headers checked",
+        "📸 Step 7: Screenshot captured",
+        "🔍 Step 8-10: Form/CSRF/MFA analyzed"
+      ],
+      "personalities": {
+        "glam": "¡Banco de Chile auditado también, weon! Proceso completo y 100% ético.",
+        "hannibal": "The oldest Chilean bank... Subject to the same ethical scrutiny. Fascinating.",
+        "tetora": "[Analysis]: Second audit... Complete... Same methodology... Consistent results..."
+      },
+      "graphicType": "puppeteer"
+    },
+    {
+      "frameNumber": 5,
+      "title": "Vulnerability: X-Frame-Options",
+      "infoLines": [
+        "### VULN-BESTADO-001",
+        "Severity: 🟠 MEDIUM",
+        "Category: Security Header Missing",
+        "",
+        "### DESCRIPTION",
+        "BancoEstado main page does not include",
+        "X-Frame-Options security header.",
+        "",
+        "### IMPACT",
+        "Potential clickjacking attacks. Attackers",
+        "could embed page in malicious iframe.",
+        "",
+        "### OWASP",
+        "• A05:2021 - Security Misconfiguration",
+        "• A04:2021 - Insecure Design",
+        "",
+        "### RECOMMENDATION",
+        "Add: X-Frame-Options: SAMEORIGIN"
+      ],
+      "personalities": {
+        "neko": "Missing header detected, nyaa~! Clickjacking risk exists, desu! Should be fixed!",
+        "mario": "Ah! A vulnerability discovered through our ethical performance!",
+        "noel": "Medium severity. Not critical, but definitely should be patched. *marks report*"
+      },
+      "graphicType": "vulnerability_warning"
+    },
+    {
+      "frameNumber": 6,
+      "title": "Finding: Login Location",
+      "infoLines": [
+        "### VULN-BESTADO-002",
+        "Severity: 🟡 LOW",
+        "Category: Information Disclosure",
+        "",
+        "### OBSERVATION",
+        "Main page does not contain visible login",
+        "form. Authentication likely on separate",
+        "subdomain or mobile app.",
+        "",
+        "### POTENTIAL RISK",
+        "Users accustomed to multiple domains may",
+        "be vulnerable to phishing attacks.",
+        "",
+        "### RECOMMENDATION",
+        "Clearly indicate official login portal URL",
+        "on main page. Educate users about the",
+        "single official authentication domain."
+      ],
+      "personalities": {
+        "glam": "No hay formulario de login en la página principal, weon. ¿Dónde se logean?",
+        "hannibal": "The login... hidden. Users must seek it elsewhere. Curious design choice.",
+        "tetora": "[Fragment]: Login form... Not found... Separate domain... Phishing risk..."
+      },
+      "graphicType": "vulnerability_warning"
+    },
+    {
+      "frameNumber": 7,
+      "title": "Strength: TLS 1.3",
+      "infoLines": [
+        "### STRENGTH-BESTADO-001",
+        "Severity: ℹ️ INFO (POSITIVE)",
+        "Category: SSL/TLS Configuration",
+        "",
+        "### EXCELLENT SECURITY",
+        "BancoEstado uses TLS 1.3 - the latest",
+        "and most secure Transport Layer Security",
+        "protocol version available.",
+        "",
+        "### BENEFITS",
+        "✅ Improved handshake (1-RTT)",
+        "✅ Forward secrecy by default",
+        "✅ Removed weak cipher suites",
+        "✅ Better privacy (encrypted handshake)",
+        "✅ Protection against MITM attacks",
+        "",
+        "### GRADE: A+"
+      ],
+      "personalities": {
+        "neko": "TLS 1.3 confirmed, nyaa~! This is MAXIMUM ENCRYPTION POWER, desu! 🔒✨",
+        "mario": "Bravo! The latest TLS protocol! A standing ovation for their security team!",
+        "noel": "Finally. Someone who understands modern encryption. Not bad. *approves*"
+      },
+      "graphicType": "ssl_lock"
+    },
+    {
+      "frameNumber": 8,
+      "title": "Strength: HSTS & CSP",
+      "infoLines": [
+        "### DOUBLE SECURITY WIN",
+        "",
+        "### HSTS (HTTP Strict Transport Security)",
+        "✅ Header Present",
+        "• Forces HTTPS connections",
+        "• Prevents SSL stripping attacks",
+        "• Protects against downgrade attacks",
+        "",
+        "### CSP (Content Security Policy)",
+        "✅ Header Present",
+        "• Prevents XSS attacks",
+        "• Blocks malicious script execution",
+        "• Controls resource loading",
+        "• Mitigates code injection",
+        "",
+        "### OWASP: A03:2021, A05:2021 (POSITIVE)"
+      ],
+      "personalities": {
+        "glam": "¡Doble protección activada, weon! HSTS y CSP funcionando perfecto.",
+        "hannibal": "Layered security... HSTS and CSP working in harmony. Quite delicious.",
+        "tetora": "[Security]: Two headers... Both present... Defense in depth... Approved..."
+      },
+      "graphicType": "security_shield"
+    },
+    {
+      "frameNumber": 9,
+      "title": "RULE 10 Compliance",
+      "infoLines": [
+        "### ETHICAL PUPPETEER",
+        "This audit follows RULE 10 - Educational",
+        "transparency in browser automation.",
+        "",
+        "### CONFIGURATION",
+        "• headless: false (Visual Mode)",
+        "• slowMo: 250ms (Visible Actions)",
+        "• devtools: true (Developer Tools Open)",
+        "",
+        "### WHY VISUAL MODE?",
+        "✅ Educational - Students see what happens",
+        "✅ Transparent - All actions observable",
+        "✅ Verifiable - Screenshots prove methodology",
+        "✅ Trustworthy - Nothing hidden",
+        "",
+        "### ETHICAL BOUNDARIES MAINTAINED"
+      ],
+      "personalities": {
+        "neko": "RULE 10 followed perfectly, nyaa~! Visual mode shows EVERYTHING we do, desu!",
+        "mario": "The browser performed in full view! Transparency is the ultimate performance!",
+        "noel": "No hidden actions. Everything logged. That's how security research should be."
+      },
+      "graphicType": "puppeteer"
+    },
+    {
+      "frameNumber": 10,
+      "title": "Package Success & Ethics",
+      "infoLines": [
+        "### DEMONSTRATION COMPLETE",
+        "Package: chilean-banks-audit v1.0.0",
+        "NPM: npm install -g chilean-banks-audit",
+        "GitHub: Public Repository",
+        "License: MIT (Educational Use)",
+        "",
+        "### AUDIT SUMMARY",
+        "• Banks: 2 (BancoEstado, Banco de Chile)",
+        "• Vulnerabilities: 2 (MEDIUM, LOW)",
+        "• Strengths: 3 (TLS 1.3, HSTS, CSP)",
+        "• Screenshots: 2 captured",
+        "• Duration: ~60 seconds",
+        "",
+        "### 100% ETHICAL",
+        "NO credentials | NO exploitation",
+        "Public pages ONLY | Educational purpose"
+      ],
+      "personalities": {
+        "glam": "¡Demostración completa y 100% ética, weon! ¡Instala el package y pruébalo!",
+        "hannibal": "A complete ethical audit... publicly demonstrated. Civilization advances.",
+        "tetora": "[Complete]: All fragments agree... Package works... Ethics maintained... Success..."
+      },
+      "graphicType": "security_shield"
+    }
+  ]
+}

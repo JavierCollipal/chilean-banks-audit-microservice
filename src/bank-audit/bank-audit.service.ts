@@ -48,7 +48,12 @@ export class BankAuditService {
         throw new Error('MONGODB_URI not configured in .env file');
       }
 
-      if (mongoUri.includes('localhost') || mongoUri.includes('127.0.0.1')) {
+      // RULE 47: MongoDB MCP must use Atlas URI, NEVER localhost!
+      // Exception: Allow MongoDB Memory Server for testing (NODE_ENV=test)
+      const isTestEnvironment = process.env.NODE_ENV === 'test';
+      const isLocalhost = mongoUri.includes('localhost') || mongoUri.includes('127.0.0.1');
+
+      if (isLocalhost && !isTestEnvironment) {
         throw new Error(
           'RULE 47 Violation: MongoDB MCP must use Atlas URI, NEVER localhost!',
         );

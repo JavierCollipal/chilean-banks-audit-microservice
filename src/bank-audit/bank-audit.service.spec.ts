@@ -32,7 +32,7 @@ describe('BankAuditService', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn((key: string) => {
-              const config = {
+              const config: Record<string, string> = {
                 MONGODB_URI: mongoUri,
                 PUPPETEER_HEADLESS: 'true',
                 PUPPETEER_SLOW_MO: '0',
