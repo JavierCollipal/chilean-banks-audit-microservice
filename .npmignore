@@ -1,0 +1,44 @@
+# Source files (publish dist/ only)
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Tests
+test/
+*.spec.ts
+*.test.ts
+coverage/
+.nyc_output/
+
+# Development files
+.env
+.env.*
+*.log
+npm-debug.log*
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation (keep README and LICENSE)
+# Everything else goes to npm
+
+# Build artifacts not needed
+node_modules/
+
+# Local chromium
+.local-chromium/
+
+# MongoDB data
+mongodb-data/

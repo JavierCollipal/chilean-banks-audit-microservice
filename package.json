@@ -1,8 +1,18 @@
 {
-  "name": "chilean-banks-audit-microservice",
+  "name": "chilean-banks-audit",
   "version": "1.0.0",
   "description": "Educational microservice for auditing Chilean bank login security features (cybersecurity course)",
   "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "bin": {
+    "chilean-banks-audit": "dist/main.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "ETHICAL-USAGE-GUIDE.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,7 +27,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "audit:bank": "ts-node src/scripts/audit-bank.ts",
-    "seed:banks": "ts-node src/scripts/seed-banks.ts"
+    "seed:banks": "ts-node src/scripts/seed-banks.ts",
+    "add:banks": "ts-node src/scripts/add-new-banks.ts"
   },
   "keywords": [
     "cybersecurity",
@@ -26,10 +37,35 @@
     "education",
     "nestjs",
     "puppeteer",
-    "security-research"
+    "security-research",
+    "chilean-banks",
+    "security-audit",
+    "defensive-security",
+    "ethical-hacking",
+    "web-security",
+    "ssl-analysis",
+    "security-headers",
+    "csrf-protection",
+    "penetration-testing"
   ],
   "author": "Neko-Arc System",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JavierCollipal/chilean-banks-audit-microservice.git"
+  },
+  "homepage": "https://github.com/JavierCollipal/chilean-banks-audit-microservice#readme",
+  "bugs": {
+    "url": "https://github.com/JavierCollipal/chilean-banks-audit-microservice/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@nestjs/common": "^10.3.0",
     "@nestjs/core": "^10.3.0",
