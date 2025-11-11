@@ -29,6 +29,7 @@
     "audit:bank": "ts-node src/scripts/audit-bank.ts",
     "audit:all": "ts-node src/scripts/run-full-audit.ts",
     "audit:demo": "ts-node src/scripts/puppeteer-demo.ts",
+    "save:vulnerabilities": "ts-node src/scripts/save-vulnerabilities.ts",
     "seed:banks": "ts-node src/scripts/seed-banks.ts",
     "add:banks": "ts-node src/scripts/add-new-banks.ts"
   },
