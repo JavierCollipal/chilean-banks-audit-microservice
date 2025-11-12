@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import compression from 'compression';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -9,6 +10,19 @@ async function bootstrap() {
 
   // Security middleware (helmet)
   app.use(helmet());
+
+  // Response compression (gzip) for performance
+  app.use(
+    compression({
+      filter: (req: any, res: any) => {
+        if (req.headers['x-no-compression']) {
+          return false;
+        }
+        return compression.filter(req, res);
+      },
+      level: 6, // Compression level (0-9, 6 is default balanced)
+    }),
+  );
 
   // Global validation pipe
   app.useGlobalPipes(

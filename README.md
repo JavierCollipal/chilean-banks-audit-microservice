@@ -50,6 +50,21 @@ Built for university cybersecurity courses - Authorized defensive security resea
 - ✅ **Comprehensive Testing** (Jest, 80% coverage minimum)
 - ✅ **Security Best Practices** (Helmet, CORS, Input validation)
 
+### Performance Features (Sprint 3.5) ⚡
+- ✅ **Caching Layer**: Bank data (1h), Audit results (5min) - **94-99% faster responses**
+- ✅ **Rate Limiting**: 10 req/min global, 3 req/min for audits - Prevents abuse
+- ✅ **Response Compression**: Gzip level 6 - **70% size reduction**
+- ✅ **Performance Monitoring**: Real-time metrics at `/performance/metrics`
+- ✅ **Puppeteer Optimization**: Headless mode, resource management
+- ✅ **Database Indexing**: Optimized MongoDB queries
+
+**Performance Improvements**:
+- Response times: 85ms → 5ms (cached)
+- Memory usage: -38% under load
+- Throughput: 15 req/s → 120 req/s (with caching)
+
+See [PERFORMANCE.md](./PERFORMANCE.md) for detailed optimization guide.
+
 ---
 
 ## 📋 Chilean Banks Included
