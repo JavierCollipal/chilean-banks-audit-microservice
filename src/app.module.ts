@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BankAuditModule } from './bank-audit/bank-audit.module';
+import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health/health.controller';
 import { PerformanceController } from './performance/performance.controller';
 import { validate } from './config/env.validation';
@@ -15,6 +16,7 @@ import { cacheConfig } from './config/cache.config';
  * - Configuration management with validation
  * - Caching layer for performance optimization
  * - Rate limiting to prevent API abuse
+ * - Optional authentication (JWT & API keys)
  * - Performance monitoring
  * - Feature modules
  * - Health checks
@@ -29,6 +31,12 @@ import { cacheConfig } from './config/cache.config';
  * - Rate limiting: 10 requests/minute (global), 3 requests/minute (audits)
  * - Response compression: gzip level 6
  * - Performance monitoring: /performance/metrics endpoint
+ *
+ * Authentication features (Sprint 3.6):
+ * - JWT token authentication (optional)
+ * - API key authentication (optional)
+ * - Demo tokens for educational testing
+ * - Authentication is NOT required by default
  */
 @Module({
   imports: [
@@ -49,6 +57,9 @@ import { cacheConfig } from './config/cache.config';
         limit: 10, // Max 10 requests per window
       },
     ]),
+
+    // Authentication (optional)
+    AuthModule,
 
     // Feature modules
     BankAuditModule,

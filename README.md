@@ -65,6 +65,25 @@ Built for university cybersecurity courses - Authorized defensive security resea
 
 See [PERFORMANCE.md](./PERFORMANCE.md) for detailed optimization guide.
 
+### Authentication Features (Sprint 3.6) 🔐
+- ✅ **JWT Token Authentication**: Optional authentication with Bearer tokens
+- ✅ **API Key Authentication**: Alternative auth via X-API-Key header
+- ✅ **Demo Tokens**: `/auth/demo-token` - Generate test tokens instantly
+- ✅ **Optional by Default**: Authentication NOT required (educational mode)
+- ✅ **Flexible Guards**: OptionalJwtGuard allows both authenticated and anonymous access
+
+**Quick Start**:
+```bash
+# Generate demo JWT token
+curl -X POST http://localhost:3000/auth/demo-token
+
+# Use token in requests (optional)
+curl -H "Authorization: Bearer <token>" http://localhost:3000/audit/banks
+
+# Or use API key
+curl -H "X-API-Key: cbam_demo_abc123" http://localhost:3000/audit/banks
+```
+
 ---
 
 ## 📋 Chilean Banks Included
