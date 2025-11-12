@@ -1,6 +1,6 @@
 {
   "name": "chilean-banks-audit",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "description": "Educational microservice for auditing Chilean bank login security features (cybersecurity course)",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
