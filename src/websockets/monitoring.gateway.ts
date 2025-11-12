@@ -38,9 +38,7 @@ import { Logger } from '@nestjs/common';
   namespace: '/', // Default namespace
   path: '/ws', // Custom path for WebSocket connections
 })
-export class MonitoringGateway
-  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
-{
+export class MonitoringGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
   @WebSocketServer()
   server: Server;
 
@@ -101,7 +99,7 @@ export class MonitoringGateway
   @SubscribeMessage('audit:subscribe')
   handleAuditSubscribe(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { bankCode?: string },
+    @MessageBody() data: { bankCode?: string }
   ) {
     const clientInfo = this.connectedClients.get(client.id);
     if (clientInfo) {
@@ -126,13 +124,13 @@ export class MonitoringGateway
   @SubscribeMessage('audit:unsubscribe')
   handleAuditUnsubscribe(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { bankCode?: string },
+    @MessageBody() data: { bankCode?: string }
   ) {
     const clientInfo = this.connectedClients.get(client.id);
     if (clientInfo) {
       const subscription = data.bankCode ? `audit:${data.bankCode}` : 'audit:*';
       clientInfo.subscriptions = clientInfo.subscriptions.filter(
-        (sub: string) => sub !== subscription,
+        (sub: string) => sub !== subscription
       );
       client.emit('audit:unsubscribed', {
         bankCode: data.bankCode,
@@ -164,7 +162,7 @@ export class MonitoringGateway
     const clientInfo = this.connectedClients.get(client.id);
     if (clientInfo) {
       clientInfo.subscriptions = clientInfo.subscriptions.filter(
-        (sub: string) => sub !== 'metrics',
+        (sub: string) => sub !== 'metrics'
       );
       client.emit('metrics:unsubscribed', {
         message: 'Unsubscribed from performance metrics',
@@ -262,10 +260,7 @@ export class MonitoringGateway
         rss: memoryUsage.rss,
         heapUsed: memoryUsage.heapUsed,
         heapTotal: memoryUsage.heapTotal,
-        usagePercentage: (
-          (memoryUsage.heapUsed / memoryUsage.heapTotal) *
-          100
-        ).toFixed(2),
+        usagePercentage: ((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100).toFixed(2),
       },
       uptime: process.uptime(),
       activeConnections: this.connectedClients.size,
@@ -282,7 +277,7 @@ export class MonitoringGateway
     return {
       totalClients: this.connectedClients.size,
       activeAudits: this.auditProgress.size,
-      clients: Array.from(this.connectedClients.values()).map((client) => ({
+      clients: Array.from(this.connectedClients.values()).map(client => ({
         id: client.id,
         connectedAt: client.connectedAt,
         subscriptions: client.subscriptions,

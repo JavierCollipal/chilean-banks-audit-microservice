@@ -154,7 +154,7 @@ class PuppeteerAuditor {
 
       // Set user agent
       await page.setUserAgent(
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 - Educational Security Research',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 - Educational Security Research'
       );
 
       console.log('✅ Page created\n');
@@ -162,8 +162,11 @@ class PuppeteerAuditor {
       console.log('🌐 Step 3: Setting up response interception...');
 
       // Capture response headers
-      page.on('response', (response) => {
-        if (response.url() === bank.loginUrl || response.url().includes(new URL(bank.loginUrl).hostname)) {
+      page.on('response', response => {
+        if (
+          response.url() === bank.loginUrl ||
+          response.url().includes(new URL(bank.loginUrl).hostname)
+        ) {
           const headers = response.headers();
           Object.assign(result.headers, headers);
 
@@ -220,7 +223,9 @@ class PuppeteerAuditor {
       console.log(`   HSTS: ${result.securityHeaders.hsts ? '✅' : '❌'}`);
       console.log(`   CSP: ${result.securityHeaders.csp ? '✅' : '❌'}`);
       console.log(`   X-Frame-Options: ${result.securityHeaders.xFrame ? '✅' : '❌'}`);
-      console.log(`   X-Content-Type-Options: ${result.securityHeaders.xContentType ? '✅' : '❌'}`);
+      console.log(
+        `   X-Content-Type-Options: ${result.securityHeaders.xContentType ? '✅' : '❌'}`
+      );
       console.log('');
 
       // Take screenshot
@@ -244,7 +249,10 @@ class PuppeteerAuditor {
       // Look for CSRF tokens
       console.log('\n🛑 Step 9: Checking CSRF protection...');
       const csrfToken = await page
-        .$eval('input[name*="csrf"], input[name*="token"], input[name*="_token"]', (el: any) => el.value)
+        .$eval(
+          'input[name*="csrf"], input[name*="token"], input[name*="_token"]',
+          (el: any) => el.value
+        )
         .catch(() => null);
 
       console.log(`   CSRF Token: ${csrfToken ? '✅ Present' : '❌ Not found'}`);
@@ -252,10 +260,18 @@ class PuppeteerAuditor {
       // Check for MFA indicators
       console.log('\n🔑 Step 10: Detecting authentication methods...');
       const pageContent = await page.content();
-      const mfaKeywords = ['MFA', '2FA', 'autenticación de dos factores', 'segundo factor', 'token'];
-      const hasMFA = mfaKeywords.some((keyword) => pageContent.includes(keyword));
+      const mfaKeywords = [
+        'MFA',
+        '2FA',
+        'autenticación de dos factores',
+        'segundo factor',
+        'token',
+      ];
+      const hasMFA = mfaKeywords.some(keyword => pageContent.includes(keyword));
 
-      console.log(`   MFA Indicators: ${hasMFA ? '✅ Detected' : '⚠️  Not detected in page content'}`);
+      console.log(
+        `   MFA Indicators: ${hasMFA ? '✅ Detected' : '⚠️  Not detected in page content'}`
+      );
 
       result.success = true;
       result.duration = Date.now() - startTime;
@@ -267,8 +283,7 @@ class PuppeteerAuditor {
 
       // Keep browser open for 3 seconds for visual inspection
       console.log('👀 Keeping browser open for 3 seconds for visual inspection...');
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
+      await new Promise(resolve => setTimeout(resolve, 3000));
     } catch (error) {
       result.success = false;
       result.error = error.message;
@@ -287,7 +302,7 @@ class PuppeteerAuditor {
           if (pages.length > 0) {
             const errorScreenshotPath = path.join(
               this.screenshotsDir,
-              `${bank.code}-ERROR-${Date.now()}.png`,
+              `${bank.code}-ERROR-${Date.now()}.png`
             );
             await pages[0].screenshot({ path: errorScreenshotPath });
             result.screenshotPath = errorScreenshotPath;
@@ -312,9 +327,10 @@ class PuppeteerAuditor {
    * Generate comprehensive report
    */
   generateReport(): string {
-    const successful = this.results.filter((r) => r.success).length;
+    const successful = this.results.filter(r => r.success).length;
     const failed = this.results.length - successful;
-    const successRate = this.results.length > 0 ? ((successful / this.results.length) * 100).toFixed(1) : '0';
+    const successRate =
+      this.results.length > 0 ? ((successful / this.results.length) * 100).toFixed(1) : '0';
 
     const report = `
 ${'='.repeat(80)}
@@ -419,7 +435,7 @@ ${'='.repeat(80)}
    * Analyze error patterns
    */
   private analyzeErrors(): string {
-    const errors = this.results.filter((r) => !r.success);
+    const errors = this.results.filter(r => !r.success);
 
     if (errors.length === 0) {
       return '✅ No errors!';
@@ -427,7 +443,7 @@ ${'='.repeat(80)}
 
     const errorTypes = new Map<string, number>();
 
-    errors.forEach((result) => {
+    errors.forEach(result => {
       const errorType = this.categorizeError(result.error || '');
       errorTypes.set(errorType, (errorTypes.get(errorType) || 0) + 1);
     });
@@ -460,7 +476,10 @@ ${'='.repeat(80)}
    * Save report to file
    */
   saveReport(report: string): string {
-    const reportPath = path.join(this.resultsDir, `audit-report-${new Date().toISOString().split('T')[0]}.txt`);
+    const reportPath = path.join(
+      this.resultsDir,
+      `audit-report-${new Date().toISOString().split('T')[0]}.txt`
+    );
     fs.writeFileSync(reportPath, report);
     return reportPath;
   }
@@ -469,7 +488,10 @@ ${'='.repeat(80)}
    * Save results as JSON
    */
   saveResultsJSON(): string {
-    const jsonPath = path.join(this.resultsDir, `audit-results-${new Date().toISOString().split('T')[0]}.json`);
+    const jsonPath = path.join(
+      this.resultsDir,
+      `audit-results-${new Date().toISOString().split('T')[0]}.json`
+    );
     fs.writeFileSync(jsonPath, JSON.stringify(this.results, null, 2));
     return jsonPath;
   }
@@ -508,7 +530,7 @@ ${'='.repeat(80)}
 
     // Small delay between audits to be respectful
     console.log('⏸️  Pausing 3 seconds before next audit...\n');
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
   }
 
   // Generate and save report
@@ -525,7 +547,7 @@ ${'='.repeat(80)}
 }
 
 // Run the demonstration
-main().catch((error) => {
+main().catch(error => {
   console.error('❌ Fatal error:', error);
   process.exit(1);
 });

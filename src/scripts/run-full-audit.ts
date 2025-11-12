@@ -103,7 +103,6 @@ class AuditRunner {
           console.log(`   ${idx + 1}. ${rec}`);
         });
       }
-
     } catch (error) {
       attempt.success = false;
       attempt.error = error.message;
@@ -152,8 +151,8 @@ ${'='.repeat(80)}
     const errorMap = new Map<string, ErrorPattern>();
 
     this.attempts
-      .filter((a) => !a.success)
-      .forEach((attempt) => {
+      .filter(a => !a.success)
+      .forEach(attempt => {
         const errorType = this.categorizeError(attempt.error || '');
 
         if (!errorMap.has(errorType)) {
@@ -202,7 +201,7 @@ ${'='.repeat(80)}
    */
   generateReport(): string {
     const totalAudits = this.attempts.length;
-    const successful = this.attempts.filter((a) => a.success).length;
+    const successful = this.attempts.filter(a => a.success).length;
     const failed = totalAudits - successful;
     const successRate = totalAudits > 0 ? ((successful / totalAudits) * 100).toFixed(1) : '0';
 
@@ -224,7 +223,7 @@ Total Audits: ${totalAudits}
 ## 🏦 Bank Results
 
 ${this.attempts
-  .map((attempt) => {
+  .map(attempt => {
     if (attempt.success) {
       const result = attempt.result;
       return `
@@ -250,12 +249,12 @@ ${
   failed > 0
     ? this.analyzeErrorPatterns()
         .map(
-          (pattern) => `
+          pattern => `
 Error Type: ${pattern.errorType}
 Count: ${pattern.count}
 Affected Banks: ${pattern.affectedBanks.join(', ')}
 Sample Message: ${pattern.sampleMessage}
-`,
+`
         )
         .join('\n')
     : 'No errors encountered! ✅'
@@ -287,47 +286,31 @@ ${'='.repeat(80)}
     const patterns = this.analyzeErrorPatterns();
     const recommendations: string[] = [];
 
-    patterns.forEach((pattern) => {
+    patterns.forEach(pattern => {
       switch (pattern.errorType) {
         case 'TIMEOUT':
           recommendations.push(
-            `⏰ Increase timeout values for slower-loading pages (current: 30s)`,
+            `⏰ Increase timeout values for slower-loading pages (current: 30s)`
           );
-          recommendations.push(
-            `🔄 Implement retry logic with exponential backoff`,
-          );
+          recommendations.push(`🔄 Implement retry logic with exponential backoff`);
           break;
         case 'NAVIGATION_FAILED':
-          recommendations.push(
-            `🌐 Add URL validation and reachability checks before audit`,
-          );
-          recommendations.push(
-            `🔄 Implement fallback URLs for banks with multiple portals`,
-          );
+          recommendations.push(`🌐 Add URL validation and reachability checks before audit`);
+          recommendations.push(`🔄 Implement fallback URLs for banks with multiple portals`);
           break;
         case 'NETWORK_ERROR':
-          recommendations.push(
-            `📡 Add network connectivity checks before starting audit`,
-          );
-          recommendations.push(
-            `🔄 Implement request retry mechanism`,
-          );
+          recommendations.push(`📡 Add network connectivity checks before starting audit`);
+          recommendations.push(`🔄 Implement request retry mechanism`);
           break;
         case 'ELEMENT_NOT_FOUND':
           recommendations.push(
-            `🔍 Make element selectors more flexible (multiple fallback selectors)`,
+            `🔍 Make element selectors more flexible (multiple fallback selectors)`
           );
-          recommendations.push(
-            `📸 Capture screenshots when elements not found for debugging`,
-          );
+          recommendations.push(`📸 Capture screenshots when elements not found for debugging`);
           break;
         case 'DATABASE_ERROR':
-          recommendations.push(
-            `🗄️  Ensure MongoDB Atlas URI is configured in .env file`,
-          );
-          recommendations.push(
-            `✅ Validate database connection before running audits`,
-          );
+          recommendations.push(`🗄️  Ensure MongoDB Atlas URI is configured in .env file`);
+          recommendations.push(`✅ Validate database connection before running audits`);
           break;
       }
     });
@@ -345,7 +328,7 @@ ${'='.repeat(80)}
   saveReport(report: string): string {
     const reportPath = path.join(
       this.screenshotsDir,
-      `audit-report-${new Date().toISOString().split('T')[0]}.txt`,
+      `audit-report-${new Date().toISOString().split('T')[0]}.txt`
     );
     fs.writeFileSync(reportPath, report);
     return reportPath;
@@ -394,7 +377,7 @@ ${'='.repeat(80)}
     await runner.auditBank(bank.code);
 
     // Small delay between audits to be respectful
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
   }
 
   // Generate and display report
@@ -410,7 +393,7 @@ ${'='.repeat(80)}
 }
 
 // Run the audit
-runFullAudit().catch((error) => {
+runFullAudit().catch(error => {
   console.error('❌ Fatal error:', error);
   process.exit(1);
 });

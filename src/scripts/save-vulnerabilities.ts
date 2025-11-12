@@ -16,7 +16,12 @@ interface Vulnerability {
   bankCode: string;
   bankName: string;
   url: string;
-  category: 'header-missing' | 'csrf-missing' | 'ssl-issue' | 'information-disclosure' | 'configuration';
+  category:
+    | 'header-missing'
+    | 'csrf-missing'
+    | 'ssl-issue'
+    | 'information-disclosure'
+    | 'configuration';
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
   title: string;
   description: string;
@@ -64,9 +69,12 @@ const vulnerabilities: Vulnerability[] = [
     category: 'header-missing',
     severity: 'MEDIUM',
     title: 'Missing X-Frame-Options Header',
-    description: 'The main page does not include the X-Frame-Options security header, which could allow the page to be embedded in an iframe by malicious sites.',
-    impact: 'Potential clickjacking attacks where attackers could trick users into clicking on concealed elements by embedding the page in a malicious frame.',
-    recommendation: 'Add X-Frame-Options header with value "DENY" or "SAMEORIGIN" to prevent the page from being framed by untrusted sites.',
+    description:
+      'The main page does not include the X-Frame-Options security header, which could allow the page to be embedded in an iframe by malicious sites.',
+    impact:
+      'Potential clickjacking attacks where attackers could trick users into clicking on concealed elements by embedding the page in a malicious frame.',
+    recommendation:
+      'Add X-Frame-Options header with value "DENY" or "SAMEORIGIN" to prevent the page from being framed by untrusted sites.',
     owasp: ['A05:2021 - Security Misconfiguration', 'A04:2021 - Insecure Design'],
     discoveredDate: new Date('2025-11-11'),
     status: 'open',
@@ -107,9 +115,12 @@ Content-Security-Policy: frame-ancestors 'self'
     category: 'information-disclosure',
     severity: 'LOW',
     title: 'Login Form Not Visible on Main Page',
-    description: 'The main page (www.bancoestado.cl) does not contain visible login form elements, suggesting authentication may occur on a separate subdomain or application.',
-    impact: 'Users may be confused about where to authenticate. If login is on a different domain, phishing risks may increase as users become accustomed to entering credentials on various BancoEstado domains.',
-    recommendation: 'Clearly indicate the official login portal URL on the main page. Consider consolidating authentication to a single, well-advertised domain (e.g., login.bancoestado.cl) and educate users about the official login URL.',
+    description:
+      'The main page (www.bancoestado.cl) does not contain visible login form elements, suggesting authentication may occur on a separate subdomain or application.',
+    impact:
+      'Users may be confused about where to authenticate. If login is on a different domain, phishing risks may increase as users become accustomed to entering credentials on various BancoEstado domains.',
+    recommendation:
+      'Clearly indicate the official login portal URL on the main page. Consider consolidating authentication to a single, well-advertised domain (e.g., login.bancoestado.cl) and educate users about the official login URL.',
     owasp: ['A04:2021 - Insecure Design', 'A07:2021 - Identification and Authentication Failures'],
     discoveredDate: new Date('2025-11-11'),
     status: 'open',
@@ -141,9 +152,12 @@ Recommendation: Add clear signage on main page directing to official login porta
     category: 'information-disclosure',
     severity: 'INFO',
     title: 'No Visible MFA/2FA Indicators on Public Page',
-    description: 'The public-facing page does not contain visible information about multi-factor authentication requirements or capabilities.',
-    impact: 'Users may not be aware of available security features. Lack of MFA communication could reduce adoption of stronger authentication methods.',
-    recommendation: 'Add prominent messaging about MFA/2FA capabilities on the main page and login portal. Educate users about the security benefits of enabling two-factor authentication.',
+    description:
+      'The public-facing page does not contain visible information about multi-factor authentication requirements or capabilities.',
+    impact:
+      'Users may not be aware of available security features. Lack of MFA communication could reduce adoption of stronger authentication methods.',
+    recommendation:
+      'Add prominent messaging about MFA/2FA capabilities on the main page and login portal. Educate users about the security benefits of enabling two-factor authentication.',
     owasp: ['A07:2021 - Identification and Authentication Failures'],
     discoveredDate: new Date('2025-11-11'),
     status: 'open',
@@ -174,9 +188,12 @@ Recommendation: If MFA is available, advertise it prominently to encourage adopt
     category: 'ssl-issue',
     severity: 'INFO',
     title: 'Strong SSL/TLS Configuration (TLS 1.3)',
-    description: 'BancoEstado uses TLS 1.3, the latest and most secure version of the Transport Layer Security protocol.',
-    impact: 'POSITIVE: Excellent protection against man-in-the-middle attacks, eavesdropping, and protocol downgrade attacks.',
-    recommendation: 'Maintain current SSL/TLS configuration. Ensure TLS 1.2 and below are disabled to prevent downgrade attacks.',
+    description:
+      'BancoEstado uses TLS 1.3, the latest and most secure version of the Transport Layer Security protocol.',
+    impact:
+      'POSITIVE: Excellent protection against man-in-the-middle attacks, eavesdropping, and protocol downgrade attacks.',
+    recommendation:
+      'Maintain current SSL/TLS configuration. Ensure TLS 1.2 and below are disabled to prevent downgrade attacks.',
     discoveredDate: new Date('2025-11-11'),
     status: 'acknowledged',
     evidence: {
@@ -206,9 +223,11 @@ This is EXCELLENT security posture.
     category: 'header-missing',
     severity: 'INFO',
     title: 'HSTS Header Properly Configured',
-    description: 'HTTP Strict Transport Security (HSTS) header is present, forcing browsers to use HTTPS connections.',
+    description:
+      'HTTP Strict Transport Security (HSTS) header is present, forcing browsers to use HTTPS connections.',
     impact: 'POSITIVE: Prevents SSL stripping attacks and ensures all connections use HTTPS.',
-    recommendation: 'Maintain current configuration. Consider HSTS preloading for maximum protection.',
+    recommendation:
+      'Maintain current configuration. Consider HSTS preloading for maximum protection.',
     owasp: ['A05:2021 - Security Misconfiguration (POSITIVE)'],
     discoveredDate: new Date('2025-11-11'),
     status: 'acknowledged',
@@ -239,9 +258,12 @@ This would provide protection even on first visit.
     category: 'header-missing',
     severity: 'INFO',
     title: 'Content Security Policy (CSP) Implemented',
-    description: 'Content-Security-Policy header is present, helping prevent XSS and other code injection attacks.',
-    impact: 'POSITIVE: Significantly reduces risk of cross-site scripting (XSS) attacks by controlling which resources can be loaded.',
-    recommendation: 'Review CSP policy to ensure it follows least-privilege principle. Avoid using "unsafe-inline" and "unsafe-eval" directives when possible.',
+    description:
+      'Content-Security-Policy header is present, helping prevent XSS and other code injection attacks.',
+    impact:
+      'POSITIVE: Significantly reduces risk of cross-site scripting (XSS) attacks by controlling which resources can be loaded.',
+    recommendation:
+      'Review CSP policy to ensure it follows least-privilege principle. Avoid using "unsafe-inline" and "unsafe-eval" directives when possible.',
     owasp: ['A03:2021 - Injection (POSITIVE)'],
     discoveredDate: new Date('2025-11-11'),
     status: 'acknowledged',
@@ -316,7 +338,10 @@ function saveToDatabase() {
   }
 
   // Save as JSON
-  const jsonPath = path.join(outputDir, `vulnerability-report-${new Date().toISOString().split('T')[0]}.json`);
+  const jsonPath = path.join(
+    outputDir,
+    `vulnerability-report-${new Date().toISOString().split('T')[0]}.json`
+  );
   fs.writeFileSync(jsonPath, JSON.stringify(report, null, 2));
 
   console.log(`\n${'='.repeat(80)}`);
@@ -337,19 +362,20 @@ function saveToDatabase() {
   // Print vulnerabilities
   console.log(`🔍 VULNERABILITIES DISCOVERED:\n`);
 
-  const negativeFindings = vulnerabilities.filter(v =>
-    !v.title.includes('Strong') &&
-    !v.title.includes('Properly') &&
-    !v.title.includes('Implemented')
+  const negativeFindings = vulnerabilities.filter(
+    v =>
+      !v.title.includes('Strong') &&
+      !v.title.includes('Properly') &&
+      !v.title.includes('Implemented')
   );
 
   negativeFindings.forEach((vuln, idx) => {
     const severityEmoji = {
-      'CRITICAL': '🚨',
-      'HIGH': '🔴',
-      'MEDIUM': '🟠',
-      'LOW': '🟡',
-      'INFO': 'ℹ️'
+      CRITICAL: '🚨',
+      HIGH: '🔴',
+      MEDIUM: '🟠',
+      LOW: '🟡',
+      INFO: 'ℹ️',
     }[vuln.severity];
 
     console.log(`${idx + 1}. ${severityEmoji} [${vuln.severity}] ${vuln.title}`);
@@ -361,10 +387,9 @@ function saveToDatabase() {
 
   console.log(`\n✅ SECURITY STRENGTHS IDENTIFIED:\n`);
 
-  const positiveFindings = vulnerabilities.filter(v =>
-    v.title.includes('Strong') ||
-    v.title.includes('Properly') ||
-    v.title.includes('Implemented')
+  const positiveFindings = vulnerabilities.filter(
+    v =>
+      v.title.includes('Strong') || v.title.includes('Properly') || v.title.includes('Implemented')
   );
 
   positiveFindings.forEach((vuln, idx) => {

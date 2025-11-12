@@ -128,7 +128,8 @@ export class PerformanceController {
   async clearCache() {
     return {
       status: 'info',
-      message: 'Manual cache clearing is available via application restart or individual key deletion',
+      message:
+        'Manual cache clearing is available via application restart or individual key deletion',
       methods: {
         restart: 'Restart the application to clear all cache',
         individualKeys: 'Delete individual cache keys via cacheManager.del(key)',

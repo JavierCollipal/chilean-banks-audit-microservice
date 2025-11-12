@@ -12,7 +12,7 @@ const chileanBanks = [
     name: 'Banco de Chile',
     code: 'BCHILE',
     loginUrl: 'https://login.portal.bancochile.cl',
-    description: 'One of Chile\'s oldest and most prestigious banks, established in 1893',
+    description: "One of Chile's oldest and most prestigious banks, established in 1893",
     active: true,
   },
   {
@@ -33,7 +33,8 @@ const chileanBanks = [
     name: 'Banco BCI',
     code: 'BCI',
     loginUrl: 'https://www.bci.cl',
-    description: 'Banco de Crédito e Inversiones, one of the most innovative banks in digital services',
+    description:
+      'Banco de Crédito e Inversiones, one of the most innovative banks in digital services',
     active: true,
   },
   {
@@ -87,15 +88,15 @@ async function seedBanks() {
 
     // Insert Chilean banks
     const result = await banksCollection.insertMany(
-      chileanBanks.map((bank) => ({
+      chileanBanks.map(bank => ({
         ...bank,
         createdAt: new Date(),
         updatedAt: new Date(),
-      })),
+      }))
     );
 
     console.log(`✅ Seeded ${result.insertedCount} Chilean banks:`);
-    chileanBanks.forEach((bank) => {
+    chileanBanks.forEach(bank => {
       console.log(`   🏦 ${bank.code}: ${bank.name}`);
     });
 

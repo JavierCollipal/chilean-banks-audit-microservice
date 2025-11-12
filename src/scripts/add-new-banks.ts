@@ -26,7 +26,8 @@ const newInstitutions: BankUpdate[] = [
     name: 'Consorcio Financiero',
     code: 'CONSORCIO',
     loginUrl: 'https://portal-corredores.consorcio.cl/login-tradicional/',
-    description: 'Chilean financial conglomerate including Banco Consorcio, 100+ years of experience',
+    description:
+      'Chilean financial conglomerate including Banco Consorcio, 100+ years of experience',
     active: true,
     type: 'financial-group',
     verified: true,
@@ -122,7 +123,7 @@ async function addNewBanks() {
             verifiedDate: update.verifiedDate,
             updatedAt: new Date(),
           },
-        },
+        }
       );
 
       if (result.matchedCount > 0) {
@@ -143,7 +144,7 @@ async function addNewBanks() {
 
     allBanks.forEach((bank: any) => {
       const code = bank.code.padEnd(15);
-      const name = (bank.name.substring(0, 28)).padEnd(28);
+      const name = bank.name.substring(0, 28).padEnd(28);
       const type = (bank.type || 'bank').padEnd(10);
       console.log(`│ ${code} │ ${name} │ ${type} │`);
     });

@@ -27,10 +27,9 @@ export class EnvironmentVariables {
    */
   @IsString()
   @IsNotEmpty({ message: 'MONGODB_URI is required. Please set it in .env file.' })
-  @Matches(
-    /^mongodb(\+srv)?:\/\/.+/,
-    { message: 'MONGODB_URI must be a valid MongoDB connection string' }
-  )
+  @Matches(/^mongodb(\+srv)?:\/\/.+/, {
+    message: 'MONGODB_URI must be a valid MongoDB connection string',
+  })
   MONGODB_URI: string;
 
   /**
@@ -98,15 +97,15 @@ export function validate(config: Record<string, unknown>): EnvironmentVariables 
 
   if (errors.length > 0) {
     // Format error messages
-    const errorMessages = errors.map((error) => {
+    const errorMessages = errors.map(error => {
       const constraints = Object.values(error.constraints || {});
       return `  ❌ ${error.property}: ${constraints.join(', ')}`;
     });
 
     throw new Error(
       `\n🚨 Environment Variable Validation Failed:\n\n${errorMessages.join('\n')}\n\n` +
-      `📝 Please check your .env file and ensure all required variables are set.\n` +
-      `📚 See DEPLOYMENT.md for configuration examples.\n`
+        `📝 Please check your .env file and ensure all required variables are set.\n` +
+        `📚 See DEPLOYMENT.md for configuration examples.\n`
     );
   }
 
@@ -133,7 +132,9 @@ function validateMongoDBURI(mongoUri: string, nodeEnv: string): void {
 
   // Test environment exception
   if (isTestEnvironment && isLocalhost) {
-    console.log('⚠️  Test environment detected: Allowing localhost MongoDB (MongoDB Memory Server)');
+    console.log(
+      '⚠️  Test environment detected: Allowing localhost MongoDB (MongoDB Memory Server)'
+    );
     return;
   }
 
@@ -141,10 +142,10 @@ function validateMongoDBURI(mongoUri: string, nodeEnv: string): void {
   if (isLocalhost && !isTestEnvironment) {
     throw new Error(
       `\n🚨 RULE 47 Violation: MongoDB Atlas Required\n\n` +
-      `  ❌ Localhost MongoDB connections are NOT allowed in production/development\n` +
-      `  ✅ Use MongoDB Atlas: mongodb+srv://user:password@cluster.mongodb.net/database\n\n` +
-      `📝 Current MONGODB_URI: ${mongoUri.replace(/\/\/[^@]+@/, '//***:***@')}\n` +
-      `📚 See DEPLOYMENT.md for MongoDB Atlas setup instructions.\n`
+        `  ❌ Localhost MongoDB connections are NOT allowed in production/development\n` +
+        `  ✅ Use MongoDB Atlas: mongodb+srv://user:password@cluster.mongodb.net/database\n\n` +
+        `📝 Current MONGODB_URI: ${mongoUri.replace(/\/\/[^@]+@/, '//***:***@')}\n` +
+        `📚 See DEPLOYMENT.md for MongoDB Atlas setup instructions.\n`
     );
   }
 
@@ -152,7 +153,7 @@ function validateMongoDBURI(mongoUri: string, nodeEnv: string): void {
   if (!isAtlas && nodeEnv === 'production') {
     console.warn(
       `⚠️  Warning: Production environment should use MongoDB Atlas (mongodb+srv://)\n` +
-      `   Current protocol: ${mongoUri.split('://')[0]}://\n`
+        `   Current protocol: ${mongoUri.split('://')[0]}://\n`
     );
   }
 }

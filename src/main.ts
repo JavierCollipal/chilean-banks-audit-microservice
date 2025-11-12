@@ -21,7 +21,7 @@ async function bootstrap() {
         return compression.filter(req, res);
       },
       level: 6, // Compression level (0-9, 6 is default balanced)
-    }),
+    })
   );
 
   // Global validation pipe
@@ -30,7 +30,7 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-    }),
+    })
   );
 
   // Enable CORS for educational purposes
@@ -43,7 +43,7 @@ async function bootstrap() {
       'Educational microservice for auditing Chilean bank login security features. ' +
         'ETHICAL USE ONLY: University cybersecurity course - Authorized research. ' +
         'Defensive security analysis: SSL, headers, CSRF, authentication methods. ' +
-        'NO credential testing, NO unauthorized access attempts.',
+        'NO credential testing, NO unauthorized access attempts.'
     )
     .setVersion('1.0')
     .addTag('audit', 'Bank security audit endpoints')

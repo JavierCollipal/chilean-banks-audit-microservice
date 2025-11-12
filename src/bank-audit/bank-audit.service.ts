@@ -36,7 +36,7 @@ export class BankAuditService {
 
   constructor(
     private configService: ConfigService,
-    private monitoringGateway: MonitoringGateway,
+    private monitoringGateway: MonitoringGateway
   ) {
     this.initializeMongoDB();
   }
@@ -58,9 +58,7 @@ export class BankAuditService {
       const isLocalhost = mongoUri.includes('localhost') || mongoUri.includes('127.0.0.1');
 
       if (isLocalhost && !isTestEnvironment) {
-        throw new Error(
-          'RULE 47 Violation: MongoDB MCP must use Atlas URI, NEVER localhost!',
-        );
+        throw new Error('RULE 47 Violation: MongoDB MCP must use Atlas URI, NEVER localhost!');
       }
 
       this.mongoClient = new MongoClient(mongoUri);
@@ -127,7 +125,7 @@ export class BankAuditService {
     const result = await this.banksCollection.findOneAndUpdate(
       { code: code.toUpperCase() },
       { $set: updateData },
-      { returnDocument: 'after' },
+      { returnDocument: 'after' }
     );
 
     if (!result) {
@@ -177,7 +175,7 @@ export class BankAuditService {
 
       // Set user agent
       await page.setUserAgent(
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 - Educational Security Research',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 - Educational Security Research'
       );
 
       // Enable request interception for header analysis
@@ -186,12 +184,12 @@ export class BankAuditService {
       const requestHeaders: Record<string, string> = {};
       const responseHeaders: Record<string, string> = {};
 
-      page.on('request', (request) => {
+      page.on('request', request => {
         Object.assign(requestHeaders, request.headers());
         request.continue();
       });
 
-      page.on('response', (response) => {
+      page.on('response', response => {
         if (response.url() === bank.loginUrl) {
           Object.assign(responseHeaders, response.headers());
         }
@@ -266,7 +264,7 @@ export class BankAuditService {
         ssl,
         headers,
         authentication,
-        csrf,
+        csrf
       );
 
       const auditResult: ISecurityAuditResult = {
@@ -314,7 +312,14 @@ export class BankAuditService {
           headers: {},
           grade: 'F',
         },
-        authentication: { methods: [], mfaAvailable: false, mfaTypes: [], passwordRequirements: [], sessionManagement: {}, grade: 'F' },
+        authentication: {
+          methods: [],
+          mfaAvailable: false,
+          mfaTypes: [],
+          passwordRequirements: [],
+          sessionManagement: {},
+          grade: 'F',
+        },
         csrf: { tokenPresent: false, isProtected: false, grade: 'F' },
         recommendations: ['Audit failed - please retry'],
         riskScore: 100,
@@ -355,10 +360,7 @@ export class BankAuditService {
   /**
    * Analyze SSL/TLS configuration
    */
-  private async analyzeSSL(
-    response: puppeteer.HTTPResponse,
-    url: string,
-  ): Promise<ISSLAnalysis> {
+  private async analyzeSSL(response: puppeteer.HTTPResponse, url: string): Promise<ISSLAnalysis> {
     const issues: string[] = [];
     let grade: ISSLAnalysis['grade'] = 'A+';
 
@@ -393,7 +395,7 @@ export class BankAuditService {
    */
   private analyzeSecurityHeaders(headers: Record<string, string>): ISecurityHeaders {
     const lowerHeaders = Object.fromEntries(
-      Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]),
+      Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v])
     );
 
     const analysis: ISecurityHeaders = {
@@ -435,7 +437,9 @@ export class BankAuditService {
 
     // Look for form elements
     const hasPasswordField = await page.$('input[type="password"]');
-    const hasUsernameField = await page.$('input[type="text"], input[type="email"], input[name*="user"], input[name*="rut"]');
+    const hasUsernameField = await page.$(
+      'input[type="text"], input[type="email"], input[name*="user"], input[name*="rut"]'
+    );
 
     if (hasPasswordField && hasUsernameField) {
       methods.push('username-password');
@@ -460,8 +464,8 @@ export class BankAuditService {
     // Session management analysis
     const cookies = await page.cookies();
     const sessionManagement = {
-      secureFlag: cookies.some((c) => c.secure),
-      httpOnlyFlag: cookies.some((c) => c.httpOnly),
+      secureFlag: cookies.some(c => c.secure),
+      httpOnlyFlag: cookies.some(c => c.httpOnly),
     };
 
     // Calculate grade
@@ -484,10 +488,12 @@ export class BankAuditService {
    */
   private async analyzeCSRF(page: puppeteer.Page): Promise<ICSRFAnalysis> {
     // Look for CSRF tokens in forms
-    const csrfToken = await page.$eval(
-      'input[name*="csrf"], input[name*="token"], input[name*="_token"]',
-      (el: HTMLInputElement) => el.value,
-    ).catch(() => null);
+    const csrfToken = await page
+      .$eval(
+        'input[name*="csrf"], input[name*="token"], input[name*="_token"]',
+        (el: HTMLInputElement) => el.value
+      )
+      .catch(() => null);
 
     const tokenPresent = !!csrfToken;
     const isProtected = tokenPresent;
@@ -508,7 +514,7 @@ export class BankAuditService {
     ssl: ISSLAnalysis,
     headers: ISecurityHeaders,
     authentication: IAuthenticationAnalysis,
-    csrf: ICSRFAnalysis,
+    csrf: ICSRFAnalysis
   ): { riskScore: number; recommendations: string[] } {
     const recommendations: string[] = [];
     let riskScore = 0;

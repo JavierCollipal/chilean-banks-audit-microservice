@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Param, Query, HttpCode, HttpStatus, Inject, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiHeader } from '@nestjs/swagger';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -28,7 +39,7 @@ import { CacheKeys, CacheTTL, getInvalidationKeys } from '../config/cache.config
 export class BankAuditController {
   constructor(
     private readonly bankAuditService: BankAuditService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   /**
@@ -133,7 +144,7 @@ export class BankAuditController {
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 3, ttl: 60000 } }) // Strict limit for resource-intensive audits
   @ApiOperation({
-    summary: 'Audit a bank\'s login page security (EDUCATIONAL USE ONLY)',
+    summary: "Audit a bank's login page security (EDUCATIONAL USE ONLY)",
     description:
       'Performs defensive security analysis of a Chilean bank login page. ' +
       'Analyzes SSL, headers, authentication methods, and CSRF protection. ' +
@@ -161,7 +172,7 @@ export class BankAuditController {
     // Run audit (resource-intensive Puppeteer operation)
     const result = await this.bankAuditService.auditBank(
       auditBankDto.bankCode,
-      auditBankDto.verbose || false,
+      auditBankDto.verbose || false
     );
 
     // Cache the result (only if not verbose)
@@ -193,7 +204,7 @@ export class BankAuditController {
   @ApiResponse({ status: 404, description: 'Bank not found' })
   async getAuditHistory(
     @Param('code') code: string,
-    @Query('limit') limit?: number,
+    @Query('limit') limit?: number
   ): Promise<ISecurityAuditResult[]> {
     const limitValue = limit || 10;
     const cacheKey = CacheKeys.AUDIT_HISTORY(code, limitValue);
@@ -233,7 +244,8 @@ export class BankAuditController {
     const info = {
       name: 'Chilean Banks Audit Microservice',
       version: '1.5.0',
-      description: 'Educational cybersecurity research tool for analyzing Chilean bank login security',
+      description:
+        'Educational cybersecurity research tool for analyzing Chilean bank login security',
       performance: {
         caching: 'Enabled (bank data: 1h, audit results: 5min)',
         rateLimiting: 'Enabled (10 req/min global, 3 req/min for audits)',
