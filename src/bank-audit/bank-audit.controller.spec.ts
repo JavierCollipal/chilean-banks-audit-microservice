@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BankAuditController } from './bank-audit.controller';
 import { BankAuditService } from './bank-audit.service';
 import { NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 /**
  * Bank Audit Controller Tests (RULE 33 - RAG Testing Protocol)
@@ -72,6 +73,13 @@ describe('BankAuditController', () => {
         {
           provide: BankAuditService,
           useValue: mockBankAuditService,
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            get: jest.fn(),
+            set: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -252,8 +260,8 @@ describe('BankAuditController', () => {
   });
 
   describe('GET /audit/info', () => {
-    it('should return service information', () => {
-      const result = controller.getServiceInfo();
+    it('should return service information', async () => {
+      const result = await controller.getServiceInfo();
 
       expect(result).toBeDefined();
       expect(result.name).toBe('Chilean Banks Audit Microservice');
@@ -261,8 +269,8 @@ describe('BankAuditController', () => {
       expect(result.description).toContain('Educational');
     });
 
-    it('should include ethical use information', () => {
-      const result = controller.getServiceInfo();
+    it('should include ethical use information', async () => {
+      const result = await controller.getServiceInfo();
 
       expect(result.ethicalUse).toBeDefined();
       expect(result.ethicalUse.purpose).toContain('University');
@@ -270,16 +278,16 @@ describe('BankAuditController', () => {
       expect(result.ethicalUse.prohibitions).toHaveLength(4);
     });
 
-    it('should include compliance rules', () => {
-      const result = controller.getServiceInfo();
+    it('should include compliance rules', async () => {
+      const result = await controller.getServiceInfo();
 
       expect(result.compliance).toBeDefined();
       expect(result.compliance.rules).toHaveLength(4);
       expect(result.compliance.rules).toContain('RULE 47: MongoDB Atlas only');
     });
 
-    it('should include six personalities', () => {
-      const result = controller.getServiceInfo();
+    it('should include six personalities', async () => {
+      const result = await controller.getServiceInfo();
 
       expect(result.personalities).toBeDefined();
       expect(Object.keys(result.personalities)).toHaveLength(6);

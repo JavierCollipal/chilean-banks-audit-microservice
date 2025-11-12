@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { BankAuditService } from './bank-audit.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient } from 'mongodb';
+import { MonitoringGateway } from '../websockets/monitoring.gateway';
 
 /**
  * Bank Audit Service Tests (RULE 33 - RAG Testing Protocol)
@@ -40,6 +41,14 @@ describe('BankAuditService', () => {
               };
               return config[key];
             }),
+          },
+        },
+        {
+          provide: MonitoringGateway,
+          useValue: {
+            emitProgress: jest.fn(),
+            emitComplete: jest.fn(),
+            emitError: jest.fn(),
           },
         },
       ],
@@ -171,6 +180,14 @@ describe('BankAuditService', () => {
                 }
                 return null;
               }),
+            },
+          },
+          {
+            provide: MonitoringGateway,
+            useValue: {
+              emitProgress: jest.fn(),
+              emitComplete: jest.fn(),
+              emitError: jest.fn(),
             },
           },
         ],
