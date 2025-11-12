@@ -70,16 +70,100 @@ Based on web research conducted 2025-11-11:
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: Docker (Recommended) 🐳
+
+**Prerequisites**:
+- Docker & Docker Compose installed
+- MongoDB Atlas account (RULE 47 - No localhost!)
+
+```bash
+# Clone the repository
+git clone https://github.com/JavierCollipal/chilean-banks-audit-microservice.git
+cd chilean-banks-audit-microservice
+
+# Configure environment
+cp .env.example .env
+nano .env  # Add your MongoDB Atlas URI
+
+# Start with Docker Compose
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+
+# Seed database (optional)
+docker-compose exec chilean-banks-audit sh -c "node dist/scripts/seed-banks.js"
+
+# Access service
+# - API: http://localhost:3000
+# - Swagger: http://localhost:3000/api
+# - Health: http://localhost:3000/health
+```
+
+**Stop service**:
+```bash
+docker-compose down
+```
+
+---
+
+### Option 2: NPM Package 📦
+
+Install as a global CLI tool or use as a library in your projects.
+
+#### Global Installation
+```bash
+# Install globally
+npm install -g chilean-banks-audit
+
+# Verify installation
+chilean-banks-audit --version
+```
+
+#### Project Installation
+```bash
+# Install as dependency
+npm install chilean-banks-audit
+
+# Use in your code
+const { BankAuditService } = require('chilean-banks-audit');
+```
+
+**Programmatic Usage Example**:
+```typescript
+import { BankAuditService } from 'chilean-banks-audit';
+import { ConfigService } from '@nestjs/config';
+
+// Initialize service
+const configService = new ConfigService({
+  MONGODB_URI: 'mongodb+srv://...',
+  PUPPETEER_HEADLESS: 'true'
+});
+
+const auditService = new BankAuditService(configService);
+
+// Run audit
+const result = await auditService.auditBank('BCHILE', false);
+console.log('Risk Score:', result.riskScore);
+console.log('SSL Grade:', result.ssl.grade);
+console.log('Recommendations:', result.recommendations);
+```
+
+---
+
+### Option 3: Manual Installation 🔧
+
+**Prerequisites**:
 - Node.js >= 18
 - MongoDB Atlas account (RULE 47 - No localhost!)
 - Basic understanding of web security concepts
 
-### Installation
-
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/JavierCollipal/chilean-banks-audit-microservice.git
 cd chilean-banks-audit-microservice
 
 # Install dependencies
@@ -130,6 +214,166 @@ npm run start:prod
 - **Service**: http://localhost:3000
 - **Swagger Docs**: http://localhost:3000/api
 - **Health Check**: http://localhost:3000/health
+
+---
+
+## 💡 Usage Examples
+
+### Example 1: Single Bank Audit (cURL)
+
+```bash
+# Audit Banco de Chile
+curl -X POST http://localhost:3000/audit/run \
+  -H "Content-Type: application/json" \
+  -d '{"bankCode": "BCHILE", "verbose": false}'
+```
+
+### Example 2: Batch Audit All Banks (Node.js)
+
+```javascript
+const axios = require('axios');
+
+async function auditAllBanks() {
+  const banks = ['BCHILE', 'BESTADO', 'SANTANDER', 'BCI', 'ITAU', 'SCOTIABANK', 'SECURITY'];
+
+  for (const bankCode of banks) {
+    console.log(`Auditing ${bankCode}...`);
+
+    const response = await axios.post('http://localhost:3000/audit/run', {
+      bankCode,
+      verbose: false
+    });
+
+    const { riskScore, ssl, headers, csrf } = response.data;
+
+    console.log(`  Risk Score: ${riskScore}`);
+    console.log(`  SSL Grade: ${ssl.grade}`);
+    console.log(`  Headers Grade: ${headers.grade}`);
+    console.log(`  CSRF Protected: ${csrf.protected}`);
+    console.log('---');
+  }
+}
+
+auditAllBanks().catch(console.error);
+```
+
+### Example 3: Using as Library (TypeScript)
+
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from 'chilean-banks-audit';
+import { BankAuditService } from 'chilean-banks-audit';
+
+async function customAudit() {
+  // Create NestJS application context
+  const app = await NestFactory.createApplicationContext(AppModule);
+
+  // Get service instance
+  const auditService = app.get(BankAuditService);
+
+  // Run audit
+  const result = await auditService.auditBank('BCHILE', false);
+
+  // Custom processing
+  if (result.riskScore > 40) {
+    console.error(`⚠️ HIGH RISK: ${result.bankName} (Score: ${result.riskScore})`);
+    console.error('Recommendations:', result.recommendations);
+  } else {
+    console.log(`✅ ${result.bankName} has good security posture`);
+  }
+
+  await app.close();
+}
+
+customAudit();
+```
+
+### Example 4: Monitoring Script with Email Alerts
+
+```typescript
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from 'chilean-banks-audit';
+import { BankAuditService } from 'chilean-banks-audit';
+import * as nodemailer from 'nodemailer';
+
+async function monitorBankSecurity() {
+  const app = await NestFactory.createApplicationContext(AppModule);
+  const auditService = app.get(BankAuditService);
+
+  const banks = ['BCHILE', 'BESTADO', 'SANTANDER'];
+  const alerts = [];
+
+  for (const bankCode of banks) {
+    const result = await auditService.auditBank(bankCode, false);
+
+    // Check for security issues
+    if (result.riskScore > 40 || result.ssl.grade === 'F') {
+      alerts.push({
+        bank: result.bankName,
+        riskScore: result.riskScore,
+        issues: result.recommendations
+      });
+    }
+  }
+
+  // Send email if alerts found
+  if (alerts.length > 0) {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: 'security@example.com',
+      to: 'admin@example.com',
+      subject: `🚨 Bank Security Alert: ${alerts.length} issues detected`,
+      text: JSON.stringify(alerts, null, 2)
+    });
+  }
+
+  await app.close();
+}
+
+// Run daily
+setInterval(monitorBankSecurity, 24 * 60 * 60 * 1000);
+```
+
+### Example 5: Integration with Express.js
+
+```javascript
+const express = require('express');
+const { NestFactory } = require('@nestjs/core');
+const { AppModule } = require('chilean-banks-audit');
+
+const app = express();
+
+let auditService;
+
+// Initialize NestJS context
+async function initAuditService() {
+  const nestApp = await NestFactory.createApplicationContext(AppModule);
+  auditService = nestApp.get('BankAuditService');
+}
+
+initAuditService();
+
+// Express route
+app.get('/audit/:bankCode', async (req, res) => {
+  try {
+    const result = await auditService.auditBank(req.params.bankCode, false);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(4000, () => console.log('Server running on port 4000'));
+```
 
 ---
 
@@ -250,6 +494,51 @@ npm run test:watch
 
 # Run E2E tests
 npm run test:e2e
+```
+
+**Test Coverage**: 76.69% statements, 82.43% branches (exceeds 75% target)
+**Total Tests**: 86 tests (61 unit + 25 E2E) - All passing ✅
+
+---
+
+## 🚀 Production Deployment
+
+For production deployment, see comprehensive guides:
+
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete production deployment guide
+  - Docker deployment (recommended)
+  - NPM package deployment
+  - Manual deployment without Docker
+  - Nginx reverse proxy configuration
+  - Security hardening (SSL, firewall, MongoDB Atlas)
+  - Monitoring with PM2/Docker
+  - Updates & maintenance
+  - Performance optimization
+
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
+  - MongoDB connection issues
+  - Puppeteer/Chromium issues
+  - Docker issues
+  - Environment variable issues
+  - Port conflicts
+  - Memory & performance issues
+  - CI/CD issues
+  - API issues
+
+**Quick Production Start (Docker)**:
+```bash
+# 1. Configure production .env
+MONGODB_URI=mongodb+srv://prod_user:password@cluster.mongodb.net/db
+PUPPETEER_HEADLESS=true
+NODE_ENV=production
+
+# 2. Deploy with Docker
+docker-compose up -d
+
+# 3. Verify deployment
+curl http://localhost:3000/health
+
+# 4. Setup Nginx reverse proxy (see DEPLOYMENT.md)
 ```
 
 ---

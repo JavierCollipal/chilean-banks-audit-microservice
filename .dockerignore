@@ -1,0 +1,50 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build
+dist
+*.tsbuildinfo
+
+# Testing
+coverage
+coverage-e2e
+test
+*.spec.ts
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+ETHICAL-USAGE-GUIDE.md
+*.md
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github
+
+# Logs
+logs
+*.log
+
+# Misc
+*.seed
+*.pid
+*.pid.lock
