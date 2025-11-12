@@ -38,6 +38,11 @@ jobs:
         env:
           NODE_ENV: test
 
+      - name: Run E2E tests
+        run: NODE_ENV=test npm run test:e2e
+        env:
+          NODE_ENV: test
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
