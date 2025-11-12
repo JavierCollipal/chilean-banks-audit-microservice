@@ -4,6 +4,10 @@
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3.3-blue)](https://www.typescriptlang.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-10.3.0-red)](https://nestjs.com/)
+[![NPM Version](https://img.shields.io/npm/v/chilean-banks-audit)](https://www.npmjs.com/package/chilean-banks-audit)
+[![NPM Downloads](https://img.shields.io/npm/dm/chilean-banks-audit)](https://www.npmjs.com/package/chilean-banks-audit)
+[![CI/CD](https://github.com/JavierCollipal/chilean-banks-audit-microservice/actions/workflows/ci.yml/badge.svg)](https://github.com/JavierCollipal/chilean-banks-audit-microservice/actions/workflows/ci.yml)
+[![Publish](https://github.com/JavierCollipal/chilean-banks-audit-microservice/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/JavierCollipal/chilean-banks-audit-microservice/actions/workflows/npm-publish.yml)
 
 **Educational microservice for auditing Chilean bank login security features**
 
@@ -583,6 +587,74 @@ npm run test:e2e
 
 **Test Coverage**: 76.69% statements, 82.43% branches (exceeds 75% target)
 **Total Tests**: 86 tests (61 unit + 25 E2E) - All passing ✅
+
+---
+
+## 👨‍💻 Development & Contributing
+
+### Automated NPM Publishing
+
+This project uses **GitHub Actions** for automated NPM publishing! 🚀
+
+**How it works**:
+1. Push a version tag (e.g., `v1.7.1`)
+2. GitHub Actions automatically:
+   - Runs all tests
+   - Builds the project
+   - Publishes to NPM with provenance
+   - Creates a GitHub release
+
+**Quick Publish**:
+```bash
+# Update version and publish in one command
+npm version patch && git push origin main && git push origin v$(node -p "require('./package.json').version")
+```
+
+**Complete Guide**: See [docs/AUTOMATED-PUBLISHING.md](./docs/AUTOMATED-PUBLISHING.md) for:
+- Setup instructions (NPM token configuration)
+- Detailed usage guide
+- Troubleshooting tips
+- Best practices
+
+### Local Development
+
+```bash
+# Clone repository
+git clone https://github.com/JavierCollipal/chilean-banks-audit-microservice.git
+cd chilean-banks-audit-microservice
+
+# Install dependencies
+npm install
+
+# Run in development mode
+npm run start:dev
+
+# Run tests
+npm run test
+
+# Run linter
+npm run lint
+
+# Build for production
+npm run build
+```
+
+### Contributing
+
+Contributions are welcome! Please:
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** with clear commit messages
+4. **Run tests**: `npm run test && npm run lint`
+5. **Submit a pull request**
+
+**Commit Message Format**:
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation changes
+- `test:` - Test additions/changes
+- `chore:` - Maintenance tasks
 
 ---
 
