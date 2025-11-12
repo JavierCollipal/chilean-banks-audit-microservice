@@ -231,7 +231,7 @@ export class BankAuditController {
   @Get('info')
   @ApiOperation({ summary: 'Get service information' })
   @ApiResponse({ status: 200, description: 'Service information' })
-  async getServiceInfo() {
+  async getServiceInfo(): Promise<any> {
     const cacheKey = CacheKeys.SERVICE_INFO;
 
     // Check cache

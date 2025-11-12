@@ -3,6 +3,7 @@ import { BankAuditController } from './bank-audit.controller';
 import { BankAuditService } from './bank-audit.service';
 import { NotFoundException } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 /**
  * Bank Audit Controller Tests (RULE 33 - RAG Testing Protocol)
@@ -79,10 +80,16 @@ describe('BankAuditController', () => {
           useValue: {
             get: jest.fn(),
             set: jest.fn(),
+            del: jest.fn(),
           },
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(ThrottlerGuard)
+      .useValue({
+        canActivate: () => true,
+      })
+      .compile();
 
     controller = module.get<BankAuditController>(BankAuditController);
     service = module.get<BankAuditService>(BankAuditService);
@@ -265,7 +272,7 @@ describe('BankAuditController', () => {
 
       expect(result).toBeDefined();
       expect(result.name).toBe('Chilean Banks Audit Microservice');
-      expect(result.version).toBe('1.0.0');
+      expect(result.version).toBe('1.5.0');
       expect(result.description).toContain('Educational');
     });
 
