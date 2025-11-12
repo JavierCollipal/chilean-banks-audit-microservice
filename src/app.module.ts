@@ -4,6 +4,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BankAuditModule } from './bank-audit/bank-audit.module';
 import { AuthModule } from './auth/auth.module';
+import { WebsocketsModule } from './websockets/websockets.module';
 import { HealthController } from './health/health.controller';
 import { PerformanceController } from './performance/performance.controller';
 import { validate } from './config/env.validation';
@@ -37,6 +38,12 @@ import { cacheConfig } from './config/cache.config';
  * - API key authentication (optional)
  * - Demo tokens for educational testing
  * - Authentication is NOT required by default
+ *
+ * Real-time features (Sprint 3.7):
+ * - WebSocket connections for real-time monitoring
+ * - Real-time audit progress streaming
+ * - Live performance metrics updates
+ * - Connection management and statistics
  */
 @Module({
   imports: [
@@ -60,6 +67,9 @@ import { cacheConfig } from './config/cache.config';
 
     // Authentication (optional)
     AuthModule,
+
+    // Real-time monitoring with WebSockets
+    WebsocketsModule,
 
     // Feature modules
     BankAuditModule,

@@ -84,6 +84,57 @@ curl -H "Authorization: Bearer <token>" http://localhost:3000/audit/banks
 curl -H "X-API-Key: cbam_demo_abc123" http://localhost:3000/audit/banks
 ```
 
+### Real-time Monitoring Features (Sprint 3.7) ⚡
+- ✅ **WebSocket Connections**: Real-time bidirectional communication
+- ✅ **Audit Progress Streaming**: Live updates during security audits
+- ✅ **Performance Metrics**: Real-time server performance monitoring
+- ✅ **Connection Management**: Track active clients and audits
+- ✅ **Event Subscriptions**: Subscribe to specific events
+
+**Quick Start**:
+```javascript
+// Node.js
+const { io } = require('socket.io-client');
+const socket = io('http://localhost:3000', { path: '/ws' });
+
+// Subscribe to audit updates
+socket.on('connect', () => {
+  socket.emit('audit:subscribe', {}); // All audits
+  socket.emit('metrics:subscribe');    // Performance metrics
+});
+
+// Listen for real-time updates
+socket.on('audit:progress', (data) => {
+  console.log(`${data.bankName}: ${data.progress}% - ${data.currentStep}`);
+});
+
+socket.on('metrics:update', (metrics) => {
+  console.log(`Memory: ${metrics.memory.usagePercentage}%`);
+});
+```
+
+**Browser Example**:
+```html
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+  const socket = io('http://localhost:3000', { path: '/ws' });
+  socket.on('audit:progress', (data) => {
+    updateProgressBar(data.progress);
+  });
+</script>
+```
+
+**Events Available**:
+- `audit:progress` - Real-time audit progress (0-100%)
+- `audit:complete` - Audit finished with results
+- `audit:error` - Audit failed with error details
+- `metrics:update` - Performance metrics every 5 seconds
+- `connection:status` - Connection health status
+
+**Example Files**:
+- `examples/websocket-client-node.js` - Full Node.js example
+- `examples/websocket-client-browser.html` - Interactive browser dashboard
+
 ---
 
 ## 📋 Chilean Banks Included

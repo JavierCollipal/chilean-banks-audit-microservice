@@ -1,6 +1,6 @@
 {
   "name": "chilean-banks-audit",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Educational microservice for auditing Chilean bank login security features (cybersecurity course)",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -77,8 +77,11 @@
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^10.3.0",
+    "@nestjs/platform-socket.io": "^10.4.20",
+    "@nestjs/schedule": "^6.0.1",
     "@nestjs/swagger": "^7.2.0",
     "@nestjs/throttler": "^6.4.0",
+    "@nestjs/websockets": "^10.4.20",
     "axios": "^1.6.5",
     "bcrypt": "^6.0.0",
     "cache-manager": "^7.2.4",
@@ -92,7 +95,8 @@
     "passport-jwt": "^4.0.1",
     "puppeteer": "^21.9.0",
     "reflect-metadata": "^0.2.1",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.3.0",

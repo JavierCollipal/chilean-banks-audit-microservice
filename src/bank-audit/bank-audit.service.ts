@@ -11,6 +11,7 @@ import {
   ICSRFAnalysis,
 } from './interfaces/bank.interface';
 import { CreateBankDto, UpdateBankDto } from './dto/audit-bank.dto';
+import { MonitoringGateway } from '../websockets/monitoring.gateway';
 
 /**
  * Bank Audit Service (RULE 5 - External Interactions)
@@ -33,7 +34,10 @@ export class BankAuditService {
   private banksCollection: Collection<IChileanBank>;
   private auditsCollection: Collection<ISecurityAuditResult>;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private monitoringGateway: MonitoringGateway,
+  ) {
     this.initializeMongoDB();
   }
 
@@ -158,6 +162,14 @@ export class BankAuditService {
 
     this.logger.log(`🔍 Starting security audit for ${bank.name} (${bank.code})`);
 
+    // Emit audit start
+    this.monitoringGateway?.emitAuditProgress(bankCode, {
+      status: 'started',
+      bankName: bank.name,
+      progress: 0,
+      currentStep: 'Initializing browser',
+    });
+
     const browser = await this.launchBrowser(verbose);
 
     try {
@@ -186,6 +198,13 @@ export class BankAuditService {
       });
 
       // Navigate to login page
+      this.monitoringGateway?.emitAuditProgress(bankCode, {
+        status: 'running',
+        bankName: bank.name,
+        progress: 20,
+        currentStep: 'Loading login page',
+      });
+
       const response = await page.goto(bank.loginUrl, {
         waitUntil: 'networkidle0',
         timeout: 30000,
@@ -196,18 +215,53 @@ export class BankAuditService {
       }
 
       // Analyze SSL
+      this.monitoringGateway?.emitAuditProgress(bankCode, {
+        status: 'running',
+        bankName: bank.name,
+        progress: 40,
+        currentStep: 'Analyzing SSL/TLS configuration',
+      });
+
       const ssl = await this.analyzeSSL(response, bank.loginUrl);
 
       // Analyze security headers
+      this.monitoringGateway?.emitAuditProgress(bankCode, {
+        status: 'running',
+        bankName: bank.name,
+        progress: 55,
+        currentStep: 'Analyzing security headers',
+      });
+
       const headers = this.analyzeSecurityHeaders(responseHeaders);
 
       // Analyze authentication methods (visual/DOM analysis)
+      this.monitoringGateway?.emitAuditProgress(bankCode, {
+        status: 'running',
+        bankName: bank.name,
+        progress: 70,
+        currentStep: 'Analyzing authentication methods',
+      });
+
       const authentication = await this.analyzeAuthentication(page);
 
       // Analyze CSRF protection
+      this.monitoringGateway?.emitAuditProgress(bankCode, {
+        status: 'running',
+        bankName: bank.name,
+        progress: 85,
+        currentStep: 'Analyzing CSRF protection',
+      });
+
       const csrf = await this.analyzeCSRF(page);
 
       // Calculate risk score and recommendations
+      this.monitoringGateway?.emitAuditProgress(bankCode, {
+        status: 'running',
+        bankName: bank.name,
+        progress: 95,
+        currentStep: 'Calculating risk score',
+      });
+
       const { riskScore, recommendations } = this.calculateRiskScore(
         ssl,
         headers,
@@ -234,9 +288,15 @@ export class BankAuditService {
 
       this.logger.log(`✅ Audit completed for ${bank.name} - Risk Score: ${riskScore}/100`);
 
+      // Emit audit completion
+      this.monitoringGateway?.emitAuditComplete(bankCode, auditResult);
+
       return auditResult;
     } catch (error) {
       this.logger.error(`❌ Audit failed for ${bank.name}:`, error.message);
+
+      // Emit audit error
+      this.monitoringGateway?.emitAuditError(bankCode, error);
 
       const failedResult: ISecurityAuditResult = {
         bankCode: bank.code,
