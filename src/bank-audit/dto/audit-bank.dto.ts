@@ -65,3 +65,44 @@ export class CreateBankDto {
   @IsBoolean()
   active?: boolean;
 }
+
+/**
+ * DTO for updating a bank (all fields optional)
+ */
+export class UpdateBankDto {
+  @ApiProperty({
+    description: 'Bank name',
+    example: 'Banco de Chile',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiProperty({
+    description: 'Bank login URL',
+    example: 'https://login.portal.bancochile.cl',
+    required: false,
+  })
+  @IsOptional()
+  @IsUrl()
+  loginUrl?: string;
+
+  @ApiProperty({
+    description: 'Bank description',
+    example: 'Banco de Chile - Online Banking Portal',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiProperty({
+    description: 'Is bank active for auditing',
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
+}

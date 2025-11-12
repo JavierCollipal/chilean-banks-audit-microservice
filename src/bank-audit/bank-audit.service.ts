@@ -10,7 +10,7 @@ import {
   IAuthenticationAnalysis,
   ICSRFAnalysis,
 } from './interfaces/bank.interface';
-import { CreateBankDto } from './dto/audit-bank.dto';
+import { CreateBankDto, UpdateBankDto } from './dto/audit-bank.dto';
 
 /**
  * Bank Audit Service (RULE 5 - External Interactions)
@@ -109,6 +109,39 @@ export class BankAuditService {
 
     await this.banksCollection.insertOne(bank as any);
     return bank;
+  }
+
+  /**
+   * Update a bank
+   */
+  async updateBank(code: string, updateBankDto: UpdateBankDto): Promise<IChileanBank> {
+    const updateData = {
+      ...updateBankDto,
+      updatedAt: new Date(),
+    };
+
+    const result = await this.banksCollection.findOneAndUpdate(
+      { code: code.toUpperCase() },
+      { $set: updateData },
+      { returnDocument: 'after' },
+    );
+
+    if (!result) {
+      throw new NotFoundException(`Bank with code ${code} not found`);
+    }
+
+    return result;
+  }
+
+  /**
+   * Delete a bank
+   */
+  async deleteBank(code: string): Promise<void> {
+    const result = await this.banksCollection.deleteOne({ code: code.toUpperCase() });
+
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(`Bank with code ${code} not found`);
+    }
   }
 
   /**
